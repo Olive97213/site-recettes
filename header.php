@@ -21,7 +21,7 @@
                     <li><a href="#">Formation</a></li>
                     <li><a href="#">Infos</a></li>
                     <li><a href="#">Contact</a></li>
-                    <li><a href="#">Se connecter</a></li>
+                    <li><a href="form.php">Se connecter</a></li>
                 </ul>
 
             </div>
@@ -32,19 +32,9 @@
 
         </nav>
     </header>
-    <div class="titre">
-        <h1>Mon site de recettes</h1>
-    </div>
-    <div class="container">
-        <div class="photo-one"></div>
-        <div class="photo-two"></div>
-    </div>
+   
 
-
-
-
-
-    <script src="link/main.js"></script>
+ <script src="link/main.js"></script>
 </body>
 
 </html>
