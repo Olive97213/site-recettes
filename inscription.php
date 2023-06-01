@@ -1,13 +1,31 @@
 <?php include_once('header.php'); ?>
+<link rel="stylesheet" href="link/inscription.css">
 
-<h2>Inscription</h2>
-    <form method="POST" action="inscription.php">
-        <label for="new_email">Nouvelle adresse e-mail :</label>
-        <input type="email" name="new_email" id="new_email" required><br><br>
-        
-        <label for="new_password">Nouveau mot de passe :</label>
-        <input type="password" name="new_password" id="new_password" required><br><br>
-        
-        <input type="submit" value="S'inscrire">
-        
+
+
+
+<div class="inscription">
+    <h2>Inscription</h2>
+    <form method="POST" action="inscription_form.php">
+
+        <label for="nom">Nom :</label>
+        <input type="texte" name="nom" id="nom"><br><br>
+
+        <label for="prenom">Prenom : </label>
+        <input type="texte" name="prenom" id="prenom"><br><br>
+
+        <label for="email">Adresse e-mail :</label>
+        <input type="email" name="email" id="email"><br><br>
+
+        <label for="password">Mot de passe :</label>
+        <input type="password" name="password" id="password"><br><br>
+
+        <input type="submit" value="S'inscrire" name="submit">
+
     </form>
+</div>
+
+
+
+
+<?php include_once('footer.php'); ?>

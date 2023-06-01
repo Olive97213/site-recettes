@@ -1,3 +1,5 @@
+<?php session_start() ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,11 +19,11 @@
             <a href="#" class="logo">LOGO</a>
             <div class="nav-link ">
                 <ul>
-                    <li><a href="#">Acceuil</a></li>
+                    <li><a href="main.php">Acceuil</a></li>
                     <li><a href="#">Formation</a></li>
                     <li><a href="#">Infos</a></li>
                     <li><a href="#">Contact</a></li>
-                    <li><a href="form.php">Se connecter</a></li>
+                    <li><a href="connexion.php">Se connecter</a></li>
                 </ul>
 
             </div>
@@ -32,9 +34,8 @@
 
         </nav>
     </header>
-   
 
- <script src="link/main.js"></script>
-</body>
+
+
 
 </html>
