@@ -19,7 +19,7 @@
             <a href="#" class="logo">LOGO</a>
             <div class="nav-link ">
                 <ul>
-                    <li><a href="main.php">Acceuil</a></li>
+                    <li><a href="main.php">Accueil</a></li>
                     <li><a href="#">Formation</a></li>
                     <li><a href="#">Infos</a></li>
                     <li><a href="#">Contact</a></li>
