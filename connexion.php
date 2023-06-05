@@ -16,6 +16,11 @@
             <p>S'inscrire</p>
         </a>
     </form>
+    
+    <?php
+session_start();
+echo $_SESSION['email'];
+?>
 
 </div>
 
