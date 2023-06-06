@@ -1,31 +1,45 @@
 <?php
 session_start();
-$bdd = new PDO('mysql:host=localhost;dbname=recettes_patisserie;charset=utf8;', 'root', '');
+$bdd = new PDO('mysql:host=localhost;dbname=recettes_patisserie;charset=utf8;', 'root','root');
+
+function getUserByEmail($email) {
+    global $bdd;
+    $query = $bdd->prepare('SELECT * FROM user WHERE email = ?');
+    $query->execute([$email]);
+    return $query->fetch();
+}
 
 if (isset($_POST['submit'])) {
-    $email = htmlspecialchars($_POST['email']);
-    $motDePasse = $_POST['password'];
-    $recupUser = $bdd->prepare('SELECT user.*
-    FROM user WHERE email = ?');
-    $recupUser->execute(array($email));
+    if (!empty($_POST['email']) && !empty($_POST['password'])) {
+        $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
+        $motDePasse = $_POST['password'];
 
-    if ($recupUser->rowCount() > 0) {
-        $user = $recupUser->fetch();
-
-        if (isset($user['mot_de_passe']) && password_verify($motDePasse, $user['mot_de_passe'])) {
-            $_SESSION['email'] = $email;
-            $_SESSION['password'] = $motDePasse;
-            $_SESSION['id'] = $user['id'];
-            header('location: user-page.php');
+        if ($email === false) {
+            echo "L'e-mail saisi n'est pas valide.";
+            header('location: connexion.php?message=' . urlencode($message));
         } else {
-            echo "Votre mot de passe est incorrect.";
+            $user = getUserByEmail($email);
+            if ($user !== false) {
+                if (password_verify($motDePasse, $user['mot_de_passe'])) {
+                    $_SESSION['id'] = $user['iduser'];
+                    $_SESSION['nom'] = $user['nom'];
+                    $_SESSION['email'] = $user['email'];
+                    $_SESSION['password'] = $user['mot_de_passe'];
+                    
+                    $message = "Connexion réussie. Bienvenue, " . $_SESSION['nom'] . "!";
+                    header('location: user-page.php?message=' . urlencode($message));
+                } else {
+                    $message = "Mot de passe incorrect.";
+                    header('location: connexion.php?message=' . urlencode($message));    
+                }
+            } else {
+                $message = "Aucun utilisateur trouvé avec cet e-mail.";
+                header('location: connexion.php?message=' . urlencode($message));
+            }
         }
     } else {
-        echo "Aucun utilisateur trouvé avec cet email.";
-    }
-
-    if (empty($_POST['email']) || empty($_POST['password'])) {
-        echo "Il faut un email et un mot de passe valide pour se connecter.";
+        $message = "Il faut remplir tous les champs du formulaire.";
+        header('location: connexion.php?message=' . urlencode($message));
     }
 }
 ?>

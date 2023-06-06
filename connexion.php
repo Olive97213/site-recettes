@@ -1,4 +1,12 @@
-<?php include_once('header.php'); ?>
+
+<?php include_once('header.php');
+
+$bdd = new PDO('mysql:host=localhost;dbname=recettes_patisserie;charset=utf8;', 'root','root');
+
+$message = isset($_GET['message']) ? $_GET['message'] : '';
+
+// Afficher le message dans le HTML
+echo $message; ?>
 <link rel="stylesheet" href="link/connexion.css">
 
 
@@ -17,10 +25,7 @@
         </a>
     </form>
     
-    <?php
-session_start();
-echo $_SESSION['email'];
-?>
+   
 
 </div>
 
