@@ -1,7 +1,8 @@
 
-<?php include_once('header.php');
+<?php 
 
-$bdd = new PDO('mysql:host=localhost;dbname=recettes_patisserie;charset=utf8;', 'root','');
+include_once('header.php');
+require_once "db.php";
 
 $message = isset($_GET['message']) ? $_GET['message'] : '';
 

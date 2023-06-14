@@ -1,6 +1,7 @@
 <?php
 session_start();
-$bdd = new PDO('mysql:host=localhost;dbname=recettes_patisserie;charset=utf8;', 'root','');
+require_once "db.php";
+
 if(isset($_GET['id']) AND !empty($_GET['id']) AND isset($_GET['cle']) AND !empty($_GET['id'])){
 $getid = $_GET['id'];
 $getCle = $_GET['cle'];

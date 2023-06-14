@@ -1,6 +1,7 @@
 <?php
+require_once "db.php";
 session_start();
-$bdd = new PDO('mysql:host=localhost;dbname=recettes_patisserie;charset=utf8;', 'root','');
+
 
 function getUserByEmail($email) {
     global $bdd;
@@ -43,3 +44,4 @@ if (isset($_POST['submit'])) {
     }
 }
 ?>
+
