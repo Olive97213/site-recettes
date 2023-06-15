@@ -1,6 +1,7 @@
 <?php
 session_start();
 $bdd = new PDO('mysql:host=localhost;dbname=recettes_patisserie;charset=utf8;', 'root', '');
+// $bdd = new PDO('mysql:host=localhost;dbname=recettes_patisserie;charset=utf8;', 'root','root');
 
 use PHPMailer\PHPMailer\PHPMailer;
 
@@ -68,7 +69,8 @@ if (isset($_POST['submit'])) {
         $from = 'golivier@gmail.com';
         $name = 'olivier';
         $subj = 'Email de confirmation';
-        $msg = '<a href="http://localhost:8888/site-recettes/verif.php?id=' . $_SESSION['id'] . '&cle=' . $cle . '"Cliquez ici</a>';
+        $msg = '<a href="http://localhost:8888/site-recettes/verif.php?id=' . $_SESSION['iduser'] . '&cle=' . $cle . '">Cliquez ici pour confirmer votre inscription</a>';
+
 
 
 
@@ -88,8 +90,8 @@ if (isset($_POST['submit'])) {
     $recupUser->execute(array($nom, $email, $motDePasse));
     if ($recupUser->rowCount() > 0) {
         $user = $recupUser->fetch();
-        if (isset($user['id'])) {
-            $_SESSION['id'] = $user['id'];
+        if (isset($user['iduser'])) {
+            $_SESSION['iduser'] = $user['iduser'];
             $_SESSION['nom'] = $nom;
             $_SESSION['email'] = $email;
             $_SESSION['password'] = $motDePasse;
