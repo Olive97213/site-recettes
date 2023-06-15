@@ -1,13 +1,13 @@
 <?php
-require_once "db.php";
 
+require_once "db.php";
 session_start();
 
-// use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\PHPMailer;
 
 
 
-// require "vendor/autoload.php";
+require "vendor/autoload.php";
 
 // if (isset($_POST['submit'])) {
 
@@ -21,9 +21,9 @@ session_start();
 //         // mise en place d'une clé aleatoire
 //         $cle = rand(1000000, 9000000);
 //         // requete d'insertion
-//         $nom = $nom . ' ' . $prenom;
-//         $insertUser = $bdd->prepare('INSERT INTO user (nom, email, mot_de_passe, cle, confirme) VALUES (?, ?, ?, ?, ?)');
-//         $insertUser->execute(array($nom, $email, $motDePasse, $cle, 0));
+//         // $nom = $nom . ' ' . $prenom;
+//         $insertUser = $bdd->prepare('INSERT INTO user (nom, prenom, email, mot_de_passe, cle, confirme) VALUES (?, ?, ?, ?, ?, ?)');
+//         $insertUser->execute(array($nom, $prenom, $email, $motDePasse, $cle, 0));
 //         $lastInsertId = $bdd->lastInsertId(); // Récupère l'id de la dernière insertion
 
 
@@ -85,13 +85,14 @@ session_start();
 //     }
 
 //     // requete pour recuperer l'utilisateur
-//     $recupUser = $bdd->prepare('SELECT * FROM user WHERE nom = ? AND email = ? AND mot_de_passe = ?');
-//     $recupUser->execute(array($nom, $email, $motDePasse));
+//     $recupUser = $bdd->prepare('SELECT * FROM user WHERE nom = ? AND prenom = ? AND email = ? AND mot_de_passe = ?');
+//     $recupUser->execute(array($nom, $prenom, $email, $motDePasse));
 //     if ($recupUser->rowCount() > 0) {
 //         $user = $recupUser->fetch();
 //         if (isset($user['id'])) {
 //             $_SESSION['id'] = $user['id'];
 //             $_SESSION['nom'] = $nom;
+//             $_SESSION['prenom'] = $prenom;
 //             $_SESSION['email'] = $email;
 //             $_SESSION['password'] = $motDePasse;
 //         }
@@ -145,14 +146,14 @@ if(isset($_POST['submit'])){
     if(empty($errors)){
 
         // récupération des valeurs de champs de formulaire et sanitize
-        $nome = htmlspecialchars($_POST['nom']) ;
-        $email = htmlspecialchars($_POST['email']) ;
+        $nom = htmlspecialchars($_POST['nom']) ;
         $prenom = htmlspecialchars($_POST['prenom']);
+        $email = htmlspecialchars($_POST['email']) ;
         $motDePasse = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hachage du mot de passe
 
         
         // Préparation de la requête d'insertion
-        $query = "INSERT INTO user (nom, email, mot_de_passe ) VALUES (:nom, :email, :mot_de_passe)";
+        $query = "INSERT INTO user (nom, prenom, email, mot_de_passe ) VALUES (:nom, :prenom, :email, :mot_de_passe)";
         $statement = $pdo->prepare($query);
 
         // liaison entre les colonnes et leur valeur
