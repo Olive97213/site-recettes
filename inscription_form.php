@@ -1,6 +1,7 @@
 <?php
 
 require_once "db.php";
+require "fonction.php";
 session_start();
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -19,11 +20,11 @@ require "vendor/autoload.php";
 //         $motDePasse = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hachage du mot de passe
 
 //         // mise en place d'une clé aleatoire
-//         $cle = rand(1000000, 9000000);
+//         $confirmationToken = rand(1000000, 9000000);
 //         // requete d'insertion
 //         // $nom = $nom . ' ' . $prenom;
-//         $insertUser = $bdd->prepare('INSERT INTO user (nom, prenom, email, mot_de_passe, cle, confirme) VALUES (?, ?, ?, ?, ?, ?)');
-//         $insertUser->execute(array($nom, $prenom, $email, $motDePasse, $cle, 0));
+//         $insertUser = $bdd->prepare('INSERT INTO user (nom, prenom, email, mot_de_passe, confirmation_token, confirmed_at) VALUES (?, ?, ?, ?, ?, ?)');
+//         $insertUser->execute(array($nom, $prenom, $email, $motDePasse, $confirmationToken, 0));
 //         $lastInsertId = $bdd->lastInsertId(); // Récupère l'id de la dernière insertion
 
 
@@ -69,7 +70,7 @@ require "vendor/autoload.php";
 //         $from = 'golivier@gmail.com';
 //         $name = 'olivier';
 //         $subj = 'Email de confirmation';
-//         $msg = '<a href="http://localhost:8888/site-recettes/verif.php?id=' . $_SESSION['id'] . '&cle=' . $cle . '"Cliquez ici</a>';
+//         $msg = '<a href="http://localhost:8888/site-recettes/verif.php?id=' . $_SESSION['id'] . '&confirmation_token=' . $confirmationToken . '"Cliquez ici</a>';
 
 
 
@@ -85,8 +86,8 @@ require "vendor/autoload.php";
 //     }
 
 //     // requete pour recuperer l'utilisateur
-//     $recupUser = $bdd->prepare('SELECT * FROM user WHERE nom = ? AND prenom = ? AND email = ? AND mot_de_passe = ?');
-//     $recupUser->execute(array($nom, $prenom, $email, $motDePasse));
+//     $recupUser = $bdd->prepare('SELECT * FROM user WHERE nom = ? AND prenom = ? AND email = ? AND mot_de_passe = ? AND confirmation_token = ?');
+//     $recupUser->execute(array($nom, $prenom, $email, $motDePasse,$confirmationToken));
 //     if ($recupUser->rowCount() > 0) {
 //         $user = $recupUser->fetch();
 //         if (isset($user['id'])) {
@@ -95,6 +96,9 @@ require "vendor/autoload.php";
 //             $_SESSION['prenom'] = $prenom;
 //             $_SESSION['email'] = $email;
 //             $_SESSION['password'] = $motDePasse;
+//             $_SESSION['confirmation_token'] = $confirmationToken;
+            
+
 //         }
 //     }
 // } else {
@@ -130,6 +134,10 @@ if(isset($_POST['submit'])){
 
         $errors['email'] = "votre email n'est pas valide";
 
+    if (empty($_POST['password'])){
+        $errors['password'] = "Le mot de passe ne peut pas être vide";
+    }
+
     } else { // Requête pour vérifier si le compte mail existe déja ou non dans la base de données
 
         $req = $pdo->prepare('SELECT iduser FROM user WHERE email=?');
@@ -149,26 +157,40 @@ if(isset($_POST['submit'])){
         $nom = htmlspecialchars($_POST['nom']) ;
         $prenom = htmlspecialchars($_POST['prenom']);
         $email = htmlspecialchars($_POST['email']) ;
-        $motDePasse = password_hash($_POST['password'], PASSWORD_DEFAULT); // Hachage du mot de passe
+        $motDePasse = password_hash($_POST['password'], PASSWORD_BCRYPT); // Hachage du mot de passe
+        $token = str_random(60);
+        $user_id = $pdo->lastInsertId();
+        
 
         
         // Préparation de la requête d'insertion
-        $query = "INSERT INTO user (nom, prenom, email, mot_de_passe ) VALUES (:nom, :prenom, :email, :mot_de_passe)";
+        $query = "INSERT INTO user (nom, prenom, email, mot_de_passe, confirmation_token ) VALUES (:nom, :prenom, :email, :mot_de_passe, :confirmation_token)";
         $statement = $pdo->prepare($query);
 
         // liaison entre les colonnes et leur valeur
         $statement->bindParam(':nom', $nom);
         $statement->bindParam(':prenom', $prenom);
         $statement->bindParam(':email', $email);
-        $statement->bindParam(':mot_de_passe', $motDePasse);
-        
+        $statement->bindParam(':confirmation_token', $token);
 
-        // Execution pour insertion en base de donnée
-        $statement->execute();
-        $_SESSION['flash']['success'] = 'Votre compte a bien été créé merci de vous connecter';
-        header('Location: connexion.php');
+        require "mail.php";
+        
+        
+        header('Location: inscription.php?success=true');
         exit();
     }
+
+
         
+else {
+        $errorMessages = implode(',', $errors);
+        $errorMessage = urlencode($errorMessages);
+        header("Location: inscription.php?message=$errorMessage");
+        exit();
+    }
 
 }
+
+
+        
+

@@ -34,3 +34,23 @@
     height: 20px;
     border-radius: 0.8em;
 }
+
+.alert-danger {
+    background-color: red;
+    margin-top: 2em;
+}
+
+.alert-danger li{
+   
+    margin-top: 0.3em;
+}
+
+
+
+.alert-success{
+   background-color: rgb(44, 238, 44);
+   margin-top: 2em;
+
+}
+
+

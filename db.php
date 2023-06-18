@@ -2,7 +2,7 @@
 // Connexion à la base de données en utilisant PDO
 try { // Le bloc try est utilisé pour encapsuler le code susceptible de générer une exception. 
     $user = 'root'; // Nom d'utilisateur de la base de données
-    $pass = ''; // Mot de passe de la base de données
+    $pass = 'root'; // Mot de passe de la base de données
     // $pass = 'root';
     $pdo = new PDO('mysql:host=localhost;dbname=recettes_patisserie;charset=utf8;', $user, $pass); // Création d'une instance PDO pour la connexion
    
